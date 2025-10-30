@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editkaro.in Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #3a1c71, #d76d77);
+            padding: 40px 20px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #f0f0f0;
+            opacity: 0.9;
+        }
+
+        nav {
+            text-align: center;
+            padding: 20px;
+            background-color: #16213e;
+        }
+
+        .filters {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .filters button {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #00ddeb, #ff6b6b);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .filters button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 221, 235, 0.4);
+        }
+
+        .portfolio {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .item {
+            background-color: #2a2a4e;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            cursor: pointer;
+            border: 2px solid #3a3a5e;
+        }
+
+        .item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 221, 235, 0.4);
+        }
+
+        .item img {
+            width: 100%;
+            max-height: 200px;
+            aspect-ratio: 16/9;
+            object-fit: contain;
+            background-color: #000;
+            transition: transform 0.3s;
+            display: block;
+        }
+
+        .item:hover img {
+            transform: scale(1.05);
+        }
+
+        .item-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .item h3 {
+            font-size: 1.4rem;
+            color: #00ddeb;
+            margin-bottom: 10px;
+        }
+
+        .item p {
+            font-size: 0.95rem;
+            color: #b0b0d0;
+            margin-bottom: 20px;
+        }
+
+        .view-video {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .view-video:hover {
+            background: linear-gradient(45deg, #4ecdc4, #ff6b6b);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            animation: fadeIn 0.5s;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 90%;
+            max-width: 900px;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #00ddeb;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .item {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .portfolio {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .filters {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .filters button {
+                width: 100%;
+                max-width: 250px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                width: 95%;
+            }
+
+            .modal-content iframe {
+                width: 100%;
+                height: 200px;
+            }
+
+            .item img {
+                max-height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Editkaro.in Portfolio</h1>
+        <p>Crafting stunning video edits and social media content for every platform.</p>
+    </header>
+
+    <nav>
+        <ul class="filters">
+            <li><button data-filter="all">All</button></li>
+            <li><button data-filter="short-form">Short-form Videos</button></li>
+            <li><button data-filter="long-form">Long-form Videos</button></li>
+            <li><button data-filter="gaming">Gaming Videos</button></li>
+            <li><button data-filter="football">Football Edits</button></li>
+            <li><button data-filter="ecommerce">eCommerce Ads</button></li>
+            <li><button data-filter="documentary">Documentary Style</button></li>
+            <li><button data-filter="color-grading">Color Grading</button></li>
+            <li><button data-filter="anime">Anime Videos</button></li>
+            <li><button data-filter="ads">Ads</button></li>
+        </ul>
+    </nav>
+
+    <section class="portfolio">
+        <!-- Short-form Videos -->
+        <div class="item" data-category="short-form">
+            <img src="https://img.youtube.com/vi/qgacIKW66VY/mqdefault.jpg" alt="Short-form Video 1">
+            <div class="item-content">
+                <h3>Dynamic Short Clip</h3>
+                <p>Engaging short-form content for social media.</p>
+                <button class="view-video" data-video-id="qgacIKW66VY">View Video</button>
+            </div>
+        </div>
+        <div class="item" data-category="short-form">
+            <img src="https://img.youtube.com/vi/hScFAHgXIFw/mqdefault.jpg" alt="Short-form Video 2">
+            <div class="item-content">
+                <h3>Quick Edit Tutorial</h3>
+                <p>Rapid cuts and effects for quick consumption.</p>
+                <button class="view-video" data-video-id="hScFAHgXIFw">View Video</button>
+            </div>
+        </div>
+
+        <!-- Long-form Videos -->
+        <div class="item" data-category="long-form">
+            <img src="https://img.youtube.com/vi/euIcBIA2j6o/mqdefault.jpg" alt="Long-form Video 1">
+            <div class="item-content">
+                <h3>In-depth Story</h3>
+                <p>Seamless narrative for YouTube.</p>
+                <button class="view-video" data-video-id="euIcBIA2j6o">View Video</button>
+            </div>
+        </div>
+        <div class="item" data-category="long-form">
+            <img src="https://img.youtube.com/vi/-ztr7ppg0n8/mqdefault.jpg" alt="Long-form Video 2">
+            <div class="item-content">
+                <h3>Extended Tutorial</h3>
+                <p>Detailed content with smooth transitions.</p>
+                <button class="view-video" data-video-id="-ztr7ppg0n8">View Video</button>
+            </div>
+        </div>
+
+        <!-- Gaming Videos -->
+        <div class="item" data-category="gaming">
+            <img src="https://img.youtube.com/vi/n2S0vN0ES4c/mqdefault.jpg" alt="Gaming Video 1">
+            <div class="item-content">
+                <h3>Gameplay Highlights</h3>
+                <p>Dynamic edits for gamers.</p>
+                <button class="view-video" data-video-id="n2S0vN0ES4c">View Video</button>
+            </div>
+        </div>
+        <div class="item" data-category="gaming">
+            <img src="https://img.youtube.com/vi/-Y0YXZHB_98/mqdefault.jpg" alt="Gaming Video 2">
+            <div class="item-content">
+                <h3>Strategy Breakdown</h3>
+                <p>Immersive effects and overlays.</p>
+                <button class="view-video" data-video-id="-Y0YXZHB_98">View Video</button>
+            </div>
+        </div>
+
+        <!-- Football Edits -->
+        <div class="item" data-category="football">
+            <img src="https://img.youtube.com/vi/_hSekZzWrWA/mqdefault.jpg" alt="Football Edit 1">
+            <div class="item-content">
+                <h3>Match Highlights</h3>
+                <p>Slow-motion replays and graphics.</p>
+                <button class="view-video" data-video-id="_hSekZzWrWA">View Video</button>
+            </div>
+        </div>
+        <div class="item" data-category="football">
+            <img src="https://img.youtube.com/vi/xxLjUeVPYYk/mqdefault.jpg" alt="Football Edit 2">
+            <div class="item-content">
+                <h3>Skill Showreel</h3>
+                <p>Exciting moments captured.</p>
+                <button class="view-video" data-video-id="xxLjUeVPYYk">View Video</button>
+            </div>
+        </div>
+
+        <!-- eCommerce Ads -->
+        <div class="item" data-category="ecommerce">
+            <img src="https://img.youtube.com/vi/swlsCBwPYHA/mqdefault.jpg" alt="eCommerce Ad 1">
+            <div class="item-content">
+                <h3>Product Showcase</h3>
+                <p>Visually appealing transitions.</p>
+                <button class="view-video" data-video-id="swlsCBwPYHA">View Video</button>
+            </div>
+        </div>
+        <div class="item" data-category="ecommerce">
+            <img src="https://img.youtube.com/vi/XzzdFaIOdyY/mqdefault.jpg" alt="eCommerce Ad 2">
+            <div class="item-content">
+                <h3>Sales Promo</h3>
+                <p>Compelling call-to-actions.</p>
+                <button class="view-video" data-video-id="XzzdFaIOdyY">View Video</button>
+            </div>
+        </div>
+
+        <!-- Documentary Style -->
+        <div class="item" data-category="documentary">
+            <img src="https://img.youtube.com/vi/NHvbFKaat5E/mqdefault.jpg" alt="Documentary 1">
+            <div class="item-content">
+                <h3>Real-life Story</h3>
+                <p>Narrative flow and interviews.</p>
+                <button class="view-video" data-video-id="NHvbFKaat5E">View Video</button>
+            </div>
+        </div>
+        <div class="item" data-category="documentary">
+            <img src="https://img.youtube.com/vi/qgacIKW66VY/mqdefault.jpg" alt="Documentary 2">
+            <div class="item-content">
+                <h3>Emotional Tale</h3>
+                <p>Cinematic visuals.</p>
+                <button class="view-video" data-video-id="qgacIKW66VY">View Video</button>
+            </div>
+        </div>
+
+        <!-- Color Grading -->
+        <div class="item" data-category="color-grading">
+            <img src="https://img.youtube.com/vi/hScFAHgXIFw/mqdefault.jpg" alt="Color Grading 1">
+            <div class="item-content">
+                <h3>Mood Enhancement</h3>
+                <p>Balanced contrast and saturation.</p>
+                <button class="view-video" data-video-id="hScFAHgXIFw">View Video</button>
+            </div>
+        </div>
+        <div class="item" data-category="color-grading">
+            <img src="https://img.youtube.com/vi/euIcBIA2j6o/mqdefault.jpg" alt="Color Grading 2">
+            <div class="item-content">
+                <h3>Cinematic Look</h3>
+                <p>Warmth and tone adjustments.</p>
+                <button class="view-video" data-video-id="euIcBIA2j6o">View Video</button>
+            </div>
+        </div>
+
+        <!-- Anime Videos -->
+        <div class="item" data-category="anime">
+            <img src="https://img.youtube.com/vi/-ztr7ppg0n8/mqdefault.jpg" alt="Anime Video 1">
+            <div class="item-content">
+                <h3>Animated Sequence</h3>
+                <p>Smooth transitions and timing.</p>
+                <button class="view-video" data-video-id="-ztr7ppg0n8">View Video</button>
+            </div>
+        </div>
+        <div class="item" data-category="anime">
+            <img src="https://img.youtube.com/vi/n2S0vN0ES4c/mqdefault.jpg" alt="Anime Video 2">
+            <div class="item-content">
+                <h3>Action Sync</h3>
+                <p>Sound effects integration.</p>
+                <button class="view-video" data-video-id="n2S0vN0ES4c">View Video</button>
+            </div>
+        </div>
+
+        <!-- Ads -->
+        <div class="item" data-category="ads">
+            <img src="https://img.youtube.com/vi/-Y0YXZHB_98/mqdefault.jpg" alt="Ad 1">
+            <div class="item-content">
+                <h3>Promotional Ad</h3>
+                <p>Concise and engaging.</p>
+                <button class="view-video" data-video-id="-Y0YXZHB_98">View Video</button>
+            </div>
+        </div>
+        <div class="item" data-category="ads">
+            <img src="https://img.youtube.com/vi/_hSekZzWrWA/mqdefault.jpg" alt="Ad 2">
+            <div class="item-content">
+                <h3>Brand Campaign</h3>
+                <p>Attention-grabbing visuals.</p>
+                <button class="view-video" data-video-id="_hSekZzWrWA">View Video</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <iframe id="video-frame" width="100%" height="500" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filters = document.querySelectorAll('.filters button');
+            const items = document.querySelectorAll('.portfolio .item');
+
+            filters.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filter = button.dataset.filter;
+                    items.forEach((item, index) => {
+                        if (filter === 'all' || item.dataset.category === filter) {
+                            item.style.display = 'block';
+                            item.style.animation = `slideIn 0.5s ease-out ${index * 0.1}s forwards`;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            const viewButtons = document.querySelectorAll('.view-video');
+            const modal = document.getElementById('modal');
+            const close = document.querySelector('.close');
+            const frame = document.getElementById('video-frame');
+
+            viewButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.dataset.videoId;
+                    frame.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+                    modal.style.display = 'block';
+                });
+            });
+
+            close.addEventListener('click', () => {
+                modal.style.display = 'none';
+                frame.src = '';
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    frame.src = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
